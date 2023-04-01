@@ -1,1 +1,1 @@
-# Learning_Pytorch_Lightning
+# Pytorch_Lightning
