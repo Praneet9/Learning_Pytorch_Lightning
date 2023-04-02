@@ -1,5 +1,4 @@
 import torch.nn as nn
-import torch
 
 class Model(nn.Module):
     
@@ -48,6 +47,8 @@ class Model(nn.Module):
 
 if __name__ == "__main__":
 
+	import torch
+	
 	model = Model().cuda()
 	tensor = torch.rand((1, 1, 98, 50)).cuda()
 	model(tensor)
