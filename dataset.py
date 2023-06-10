@@ -3,10 +3,10 @@ from glob import glob
 from PIL import Image
 import os
 
-class ImageDataset(Dataset):
+class ImageClassificationDataset(Dataset):
     
-	def __init__(self, class_to_idx, dataset_dir, 
-	      		height=98, width=50, transformations=None):
+	def __init__(self, dataset_dir, height=98, 
+	      		 width=50, transformations=None):
 		
 		self.class_to_idx = {
 			'background': 0,
@@ -48,4 +48,34 @@ class ImageDataset(Dataset):
 		return {
 			'image': image,
 			'label': label
+		}
+
+
+class ImageGenerationDataset(Dataset):
+    
+	def __init__(self, dataset_dir, height=98, 
+	      		 width=50, transformations=None):
+		
+		self.dataset_dir = dataset_dir
+		self.height = height
+		self.width = width
+		self.transforms = transformations
+
+	def load_dataset(self):
+
+		self.images = glob(self.dataset_dir)
+
+	def __len__(self):
+
+		return len(self.labels)
+	
+	def __getitem__(self, index):
+
+		image = Image.open(self.images[index])
+
+		if self.transforms:
+			image = self.transforms(image)
+
+		return {
+			'image': image
 		}
