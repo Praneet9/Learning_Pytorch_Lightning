@@ -1,4 +1,5 @@
 from torch.utils.data import Dataset
+from torchvision import transforms
 from glob import glob
 from PIL import Image
 import os
@@ -23,10 +24,14 @@ class ImageClassificationDataset(Dataset):
 			'yes': 11
 		}
 		self.idx_to_class = {value: key for key, value in self.class_to_idx.items()}
-		self.dataset_dir = dataset_dir
+		self.dataset_dir = os.path.join(dataset_dir, '*', '*.png')
 		self.height = height
 		self.width = width
-		self.transforms = transformations
+		if transformations is not None:
+			self.transformations = transformations
+		else:
+			self.transformations = transforms.ToTensor()
+		self.load_dataset()
 
 	def load_dataset(self):
 
@@ -42,8 +47,7 @@ class ImageClassificationDataset(Dataset):
 		image = Image.open(self.images[index]).convert('L')
 		label = self.labels[index]
 
-		if self.transforms:
-			image = self.transforms(image)
+		image = self.transformations(image)
 
 		return {
 			'image': image,
