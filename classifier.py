@@ -7,12 +7,13 @@ from torchmetrics import Accuracy, F1
 
 class Classifier(pl.LightningModule):
     
-	def __init__(self):
+	def __init__(self, classes, lr):
 		super().__init__()
+		self.lr = lr
 		self.model = Model()
 		self.loss_fn = nn.CrossEntropyLoss()
-		self.accuracy = Accuracy(multiclass=True, num_classes=12)
-		self.f1_score = F1(multiclass=True, num_classes=12)
+		self.accuracy = Accuracy(multiclass=True, num_classes=classes)
+		self.f1_score = F1(multiclass=True, num_classes=classes)
 
 	def forward(self, x):
 		return self.model(x)
@@ -49,4 +50,4 @@ class Classifier(pl.LightningModule):
 		return preds
 	
 	def configure_optimizers(self):
-		return Adam(self.parameters(), lr=0.001)
+		return Adam(self.parameters(), lr=self.lr)
