@@ -63,7 +63,11 @@ class ImageGenerationDataset(Dataset):
 		self.dataset_dir = dataset_dir
 		self.height = height
 		self.width = width
-		self.transforms = transformations
+		if transformations is not None:
+			self.transformations = transformations
+		else:
+			self.transformations = transforms.ToTensor()
+		self.load_dataset()
 
 	def load_dataset(self):
 
@@ -71,14 +75,12 @@ class ImageGenerationDataset(Dataset):
 
 	def __len__(self):
 
-		return len(self.labels)
+		return len(self.images)
 	
 	def __getitem__(self, index):
 
 		image = Image.open(self.images[index])
-
-		if self.transforms:
-			image = self.transforms(image)
+		image = self.transformations(image)
 
 		return {
 			'image': image
