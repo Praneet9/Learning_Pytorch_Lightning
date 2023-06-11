@@ -7,11 +7,15 @@ import config as cfg
 model = Classifier(cfg.N_CLASSES, cfg.LR)
 
 train_dataloader = DataLoader(
-    ImageClassificationDataset(cfg.TRAIN_DIR), 
-    batch_size=cfg.BATCH_SIZE, num_workers=cfg.NUM_WORKERS
+    ImageClassificationDataset(cfg.TRAIN_DIR),
+    batch_size=cfg.BATCH_SIZE,
+    num_workers=cfg.NUM_WORKERS,
 )
-test_dataloader = DataLoader(ImageClassificationDataset(cfg.TEST_DIR), 
-                             batch_size=cfg.BATCH_SIZE, num_workers=cfg.NUM_WORKERS)
+test_dataloader = DataLoader(
+    ImageClassificationDataset(cfg.TEST_DIR),
+    batch_size=cfg.BATCH_SIZE,
+    num_workers=cfg.NUM_WORKERS,
+)
 
 trainer = pl.Trainer(
     accelerator=cfg.ACCELERATOR,
