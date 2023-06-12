@@ -23,20 +23,35 @@ class Classifier(pl.LightningModule):
         accuracy = self.accuracy(scores, y)
         f1_score = self.f1_score(scores, y)
         self.log_dict(
-            {"Training Loss": loss, "Accuracy": accuracy, "F1 Score": f1_score},
+            {"Loss": loss, "Accuracy": accuracy, "F1 Score": f1_score},
             on_epoch=True,
+            on_step=False,
             prog_bar=True,
         )
         return loss
 
     def validation_step(self, batch, batch_idx):
         loss, scores, y = self._step(batch)
-        self.log("Validation Loss", loss)
+        accuracy = self.accuracy(scores, y)
+        f1_score = self.f1_score(scores, y)
+        self.log_dict(
+            {"Validation Loss": loss, "Validation Accuracy": accuracy, "F1 Score": f1_score},
+            on_epoch=True,
+            on_step=False,
+            prog_bar=True,
+        )
         return loss
 
     def test_step(self, batch, batch_idx):
         loss, scores, y = self._step(batch)
-        self.log("Test Loss", loss)
+        accuracy = self.accuracy(scores, y)
+        f1_score = self.f1_score(scores, y)
+        self.log_dict(
+            {"Test Loss": loss, "Test Accuracy": accuracy, "F1 Score": f1_score},
+            on_epoch=True,
+            on_step=False,
+            prog_bar=True,
+        )
         return loss
 
     def _step(self, batch):
